@@ -1,0 +1,117 @@
+int trigPin1 = 6;
+int echoPin1 = 7;
+int trigPin2 = 8;
+int echoPin2 = 9;
+int trigPin3 = 10;
+int echoPin3 = 11;
+int motorL1 = 2;
+int motorL2 = 3;
+int motorR1 = 4;
+int motorR2 = 5;
+int enable1 = 3;
+int enable2 = 9;
+float leftDistance;
+float rightDistance;
+float centerDistance;
+float rightduration;
+float centerduration;
+float leftduration;
+
+
+void setup() {
+    Serial.begin(9600);
+ pinMode(motorL1, OUTPUT);
+  pinMode(motorL2, OUTPUT);
+  pinMode(motorR1, OUTPUT);
+  pinMode(motorR2, OUTPUT);
+  pinMode(trigPin1, OUTPUT);
+  pinMode(echoPin1, INPUT);
+  pinMode(trigPin2, OUTPUT);
+  pinMode(echoPin2, INPUT);
+  pinMode(trigPin3, OUTPUT);
+  pinMode(echoPin3, INPUT);
+  pinMode(enable1, OUTPUT);
+  pinMode(enable2, OUTPUT);
+ analogWrite(enable1, 200);
+ analogWrite(enable2, 200);
+void rightSensor(){
+digitalWrite(trigPin1, HIGH);
+delayMicroseconds(10);
+digitalWrite(trigPin1, LOW);
+rightduration = pulseIn(echoPin1, HIGH);
+rightdistance= rightduration*0.034/2;
+Serial.print(rightdistance);
+}
+void centerSensor(){
+digitalWrite(trigPin2, HIGH);
+delayMicroseconds(10);
+digitalWrite(trigPin2, LOW);
+centerduration = pulseIn(echoPin2, HIGH);
+cebterdistance= centerduration*0.034/2;
+Serial.print(centerdistance);
+}
+void leftSensor(){
+digitalWrite(trigPin3, HIGH);
+delayMicroseconds(10);
+digitalWrite(trigPin3, LOW);
+leftduration = pulseIn(echoPin3, HIGH);
+leftdistance= centerduration*0.034/2;
+Serial.print(leftdistance);
+}
+  void TurnRight(){
+  digitalWrite(motorL1,HIGH);
+  digitalWrite(motorL2,LOW);
+  digitalWrite(motorR1,LOW);
+  digitalWrite(motorR2,LOW);
+  }
+  void TurnLeft(){
+  digitalWrite(motorL1,LOW);
+  digitalWrite(motorL2,LOW);
+  digitalWrite(motorR1,HIGH);
+  digitalWrite(motorR2,LOW);
+  }
+  void Stop(){
+  digitalWrite(motorL1,LOW);
+  digitalWrite(motorL2,LOW);
+  digitalWrite(motorR1,LOW);
+  digitalWrite(motorR2,LOW);
+  }
+  void Forward(){
+  digitalWrite(motorL1,HIGH);
+  digitalWrite(motorL2,LOW);
+  digitalWrite(motorR1,HIGH);
+  digitalWrite(motorR2,LOW);
+  }
+  }
+
+void loop() {
+  rightSensor();
+  centerSensor();
+  leftSensor();
+ if(centerSensor>=10.00 && leftSensor<=15.00)
+{
+   Serial.println("Turn right");
+   TurnRight(); 
+ }
+else if(centerSensor>=10.00 && rightSensor<=15.00)
+{
+   Serial.println("Turn left");
+   TurnLeft();
+ }
+else if(centerSensor==10.00 || centerSensor<10.00){
+  if(leftDistance<rightDistance)
+  TurnRight();
+  else
+  if(leftDisance>rightDistance)
+  TurnLeft();
+}
+  Serial.display("Stop");
+  Stop();
+}
+else
+{
+    Serial.println("Forward");
+    Forward();
+ }
+}
+  
